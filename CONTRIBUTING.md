@@ -137,6 +137,65 @@ Before approval, reviewers should be able to answer yes to each question:
    flexibility, or parity?
 5. Do shipped docs match verified behavior and state any real limitation?
 
+## The 0.2 compatibility line
+
+The `0.2.x` line is Askr's compatibility-focused boring phase. Public contracts
+include package exports and declarations, accepted inputs, runtime behavior and
+ordering, lifecycle and cleanup, error categories, codes, and paths, CLI
+behavior, generated specifications, accessibility semantics, CSS tokens, peer
+requirements, and documented operating models.
+
+Changes on this line are limited to fixes, documentation, diagnostics,
+maintenance, compatible simplification, and narrowly demonstrated application
+gaps. A new public primitive needs a real application, explicit failure modes,
+actionable invariant checks, North Star review, and proof from a packed
+consumer. Otherwise, defer it.
+
+A breaking contract requires an approved RFC for a future compatibility line.
+The RFC must document the application need, alternatives, legibility cost,
+affected consumers, migration path, and a compatibility adapter or deprecation
+when feasible. Optimization is not a reason to weaken invariants, change error
+behavior, or add a hidden path without the optimization evidence above.
+
+### Internal dependency ranges
+
+Preserve how an existing Askr relationship is modeled and where it is declared:
+
+- exact internal dependencies use the exact coordinated version;
+- ranged internal dependencies use `>=0.2.0 <0.3.0` on the `0.2.x` line; and
+- dependency fields, optionality, and package presence do not change merely for
+  normalization.
+
+Apply the rule consistently to `dependencies`, `devDependencies`,
+`peerDependencies`, and `optionalDependencies`, regenerate lockfiles, and verify
+that no direct Askr relationship retains a pre-line constraint.
+
+### Release procedure
+
+Published packages release independently after the coordinated `0.2.0`
+baseline. Release only affected packages and required dependants, in dependency
+order.
+
+For each package:
+
+1. merge the focused issue and draft pull request only after review and hosted
+   checks are green;
+2. build and exercise unit, integration, type, lint, documentation, package,
+   installed-consumer, browser, example, server, and benchmark gates appropriate
+   to that repository;
+3. inspect the packed artifact and qualify registry dependencies from a clean
+   installation;
+4. publish the reviewed main commit with provenance;
+5. verify npm metadata and installation, then verify that the release tag points
+   to that same commit; and
+6. update downstream consumers only after the upstream package is available to
+   their hosted checks.
+
+Three consecutive patch cycles using this workflow, with no escaped contract
+regression, emergency republish, or unexplained benchmark failure, establish the
+stable boring phase. Record each completed cycle; do not infer completion from
+version numbers alone.
+
 ## Review and project trust
 
 Contributions are evaluated on relevance, correctness, maintainability, and the
