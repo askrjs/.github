@@ -210,3 +210,13 @@ follow-up.
 
 Repository-specific guides may add build, testing, documentation, and style
 requirements. Those local requirements apply in addition to this policy.
+
+## Git hooks
+
+Enable the repository hooks after cloning:
+
+```shell
+git config core.hooksPath .githooks
+```
+
+Commit messages may not contain `Co-authored-by:` trailers. The canonical Dependabot co-author trailer is the only exception. Pull requests run the same validation on GitHub, so the policy applies even when a contributor has not enabled local hooks.
